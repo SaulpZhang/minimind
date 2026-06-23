@@ -102,6 +102,7 @@ if __name__ == "__main__":
     parser.add_argument('--from_resume', default=0, type=int, choices=[0, 1], help="是否自动检测&续训（0=否，1=是）")
     parser.add_argument("--use_wandb", action="store_true", help="是否使用wandb")
     parser.add_argument("--wandb_project", type=str, default="MiniMind-Pretrain", help="wandb项目名")
+    parser.add_argument('--run_name', type=str, default='Pretrain', help="wandb运行名称")
     parser.add_argument("--use_compile", default=0, type=int, choices=[0, 1], help="是否使用torch.compile加速（0=否，1=是）")
     args = parser.parse_args()
 
@@ -126,7 +127,7 @@ if __name__ == "__main__":
         import swanlab as wandb
         wandb_id = ckp_data.get('wandb_id') if ckp_data else None
         resume = 'must' if wandb_id else None
-        wandb_run_name = f"MiniMind-Pretrain-Epoch-{args.epochs}-BatchSize-{args.batch_size}-LearningRate-{args.learning_rate}"
+        wandb_run_name = args.run_name
         wandb.init(project=args.wandb_project, name=wandb_run_name, id=wandb_id, resume=resume)
     
     # ========== 5. 定义模型、数据、优化器 ==========
